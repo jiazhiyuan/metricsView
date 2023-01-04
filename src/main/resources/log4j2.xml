@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE xml>
+<!--status:Log4j2内部日志的输出级别，设置为TRACE对学习Log4j2非常有用 -->
+<!--monitorInterval:定时检测配置文件的修改，有变化则自动重新加载配置，时间单位为秒，最小间隔为5s -->
+<Configuration status="TRACE" monitorInterval="3600">
+    <!-- Properties:设置全局变量 -->
+    <Properties>
+        <!--
+          格式化输出：
+          %d表示日期，
+          %thread表示线程名，
+          %-5level:级别从左显示5个字符宽度
+          %msg:日志消息，%n是换行符
+          %logger{36}表示Logger名字最长36个字符
+          -->
+        <Property name="logPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} | [${env:USERNAME}] | %highlight{%-5level} | [%t] | %style{%logger{36}}{cyan} | [%l] : %msg%n" />
+        <Property name="dir_url">d:/logs</Property>
+    </Properties>
+    <!--使用Appenders元素可以将日志事件数据写到各种目标位置-->
+    <Appenders>
+        <!-- 默认打印到控制台 -->
+        <Console name="ConsoleAppend" target="SYSTEM_OUT">
+            <!-- 默认打印格式 -->
+            <PatternLayout pattern="${myPattern}"/>
+        </Console>
+        <!-- 打印到日志文件上 -->
+        <File name="FileAppend" fileName="${dir_url}/fileLog.log" bufferedIO="true" immediateFlush="true">
+            <PatternLayout>
+                <pattern>${myPattern}</pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <!--定义logger，只有定义了logger并引入的appender，appender才会生效-->
+    <Loggers>
+        <!-- 默认打印日志级别为 error -->
+        <Root level="INFO">
+            <AppenderRef ref="ConsoleAppend"/>
+            <AppenderRef ref="FileAppend"/>
+        </Root>
+    </Loggers>
+</Configuration>
